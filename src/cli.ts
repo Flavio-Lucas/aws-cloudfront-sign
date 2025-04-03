@@ -14,7 +14,8 @@ const CLOUDFRONT_CONFIG: CloudFrontConfig = {
 };
 
 program
-  .name('cloudfront-auth')
+  .name('aws-cloudfront-sign')
+  .alias('cfs')
   .description('CLI para gerar URLs assinadas ou cookies do CloudFront')
   .version('1.0.0');
 
