@@ -1,18 +1,21 @@
 {
-  "name": "cloudfront-poc",
+  "name": "aws-cloudfront-sign",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.ts",
-  "scripts": {
-    "start": "tsx index.ts"
+  "type": "module",
+  "bin": {
+    "cloudfront-auth": "./src/cli.ts"
   },
-  "author": "",
-  "license": "ISC",
+  "scripts": {
+    "start": "node ./src/cli.ts presigned-url 's3://your-bucket/output/video-id/'"
+  },
   "dependencies": {
-    "@aws-sdk/cloudfront-signer": "^3.775.0",
-    "dotenv": "^16.4.7"
+    "@aws-sdk/cloudfront-signer": "^3.0.0",
+    "commander": "^11.0.0",
+    "dotenv": "^16.0.0"
   },
   "devDependencies": {
-    "@types/node": "^22.14.0"
+    "@types/node": "^22.14.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
   }
 }
