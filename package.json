@@ -6,7 +6,7 @@
     "cloudfront-auth": "./src/cli.ts"
   },
   "scripts": {
-    "start": "node ./src/cli.ts presigned-url 's3://your-bucket/output/video-id/'"
+    "start": "tsx src/cli.ts --help"
   },
   "dependencies": {
     "@aws-sdk/cloudfront-signer": "^3.0.0",

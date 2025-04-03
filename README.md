@@ -34,7 +34,6 @@ Configure o arquivo `.env`:
 CLOUDFRONT_KEY_PAIR_ID=APKXXX
 CLOUDFRONT_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n..."
 CLOUDFRONT_URL=https://d123.cloudfront.net
-AWS_MEDIA_CONVERT_OUTPUT_BUCKET=your-bucket
 ```
 
 ## 🚀 Como Usar
@@ -43,17 +42,21 @@ AWS_MEDIA_CONVERT_OUTPUT_BUCKET=your-bucket
 
 ```bash
 # Presigned URL (um arquivo)
-npx ts-node src/cli.ts presigned-url "s3://your-bucket/output/video-id/"
+npx ts-node src/cli.ts presigned-url "s3://your-bucket/video-id/"
 
 # Signed Cookies (todos os arquivos do diretório)
-npx ts-node src/cli.ts signed-cookies "s3://your-bucket/output/video-id/"
+npx ts-node src/cli.ts signed-cookies "s3://your-bucket/video-id/"
 ```
 
 ### Opção 2: Instalação Global
 
 ```bash
 npm install -g .
-aws-cloudfront-sign presigned-url "s3://your-bucket/output/video-id/"
+aws-cloudfront-sign presigned-url "s3://your-bucket/video-id/"
+```
+
+```bash
+cfs presigned-url "s3://your-bucket/video-id/"
 ```
 
 ## 📌 Exemplos
@@ -61,7 +64,7 @@ aws-cloudfront-sign presigned-url "s3://your-bucket/output/video-id/"
 ### Saída de Presigned URL
 
 ```bash
-https://d123.cloudfront.net/output/video-id/stream-h264.m3u8?Policy=...&Signature=...&Key-Pair-Id=...
+https://d123.cloudfront.net/video-id/stream-h264.m3u8?Policy=...&Signature=...&Key-Pair-Id=...
 ```
 
 ### Saída de Signed Cookies
