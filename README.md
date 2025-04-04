@@ -1,73 +1,74 @@
-# 📦 Recursos
+# 📦 Resources
 
-- Gera presigned URLs para acesso temporário a arquivos específicos.
-- Cria signed cookies para acesso a múltiplos arquivos (ideal para streaming HLS).
-- Configuração via variáveis de ambiente (.env).
-- Suporte a TypeScript e Node.js v20+.
+- Generate presigned URLs for temporary access to an especific file.
+- Generate Signed cookies for access to multiples files (ideal for streaming HLS).
+- Configuration throght environment variables (.env).
+- TypeScript & Node.js v20+.
 
-## 🛠 Instalação
+## 🛠 Installation
 
-### Pré-requisitos
+### Prerequisites
 
 - Node.js v20+
-- npm ou yarn
-- Chaves de acesso AWS CloudFront (Key Pair ID e Private Key)
+- npm or yarn
+- AWS CloudFront access keys (Key Pair ID and Private Key)
 
-### Passo a Passo
+### Step by step
 
-Clone o repositório:
+Clone the repository:
 
 ```bash
 git clone https://github.com/Flavio-Lucas/aws-cloudfront-sign.git
 cd aws-cloudfront-sign
 ```
 
-Instale as dependências:
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-Configure o arquivo `.env`:
+Configure the `.env` file:
 
 ```env
 CLOUDFRONT_KEY_PAIR_ID=APKXXX
 CLOUDFRONT_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n..."
 CLOUDFRONT_URL=https://d123.cloudfront.net
+CLOUDFRONT_EXPIRATION_SECONDS=14400 # 4 hours
 ```
 
-## 🚀 Como Usar
+## 🚀 How to use it
 
-### Opção 1: Execução Local (Recomendado para desenvolvimento)
+### Option 1: Local Execution (Recommended to development)
 
 ```bash
-# Presigned URL (um arquivo)
-npx ts-node src/cli.ts presigned-url "s3://your-bucket/video-id/"
+# Presigned URL (One file)
+npx tsx src/cli.ts presigned-url "s3://<BucketName>/<ObjectKeyPrefix>/<ObjectKey>"
 
-# Signed Cookies (todos os arquivos do diretório)
-npx ts-node src/cli.ts signed-cookies "s3://your-bucket/video-id/"
+# Signed Cookies (all the files from a directory)
+npx tsx src/cli.ts signed-cookies "s3://<BucketName>/<ObjectKeyPrefix>"
 ```
 
-### Opção 2: Instalação Global
+### Option 2: Global Installation
 
 ```bash
 npm install -g .
-aws-cloudfront-sign presigned-url "s3://your-bucket/video-id/"
+aws-cloudfront-sign presigned-url "s3://<BucketName>/<ObjectKeyPrefix>/<ObjectKey>"
 ```
-
+alias:
 ```bash
-cfs presigned-url "s3://your-bucket/video-id/"
+cfs presigned-url "s3://<BucketName>/<ObjectKeyPrefix>/<ObjectKey>"
 ```
 
 ## 📌 Exemplos
 
-### Saída de Presigned URL
+### Output for Presigned URL
 
 ```bash
 https://d123.cloudfront.net/video-id/stream-h264.m3u8?Policy=...&Signature=...&Key-Pair-Id=...
 ```
 
-### Saída de Signed Cookies
+### Output for Signed Cookies
 
 ```bash
 CloudFront-Policy=...; Path=/; Secure; HttpOnly
@@ -75,56 +76,43 @@ CloudFront-Signature=...; Path=/; Secure; HttpOnly
 CloudFront-Key-Pair-Id=...; Path=/; Secure; HttpOnly
 ```
 
-## 🧩 Estrutura do Projeto
+## 🧩 Project structure
 
 ```
 /aws-cloudfront-sign/
   ├── src/
-  │   ├── cli.ts            # CLI principal
-  │   ├── presigned-url.ts  # Lógica de URLs assinadas
-  │   ├── signed-cookies.ts # Lógica de cookies assinados
-  │   ├── types.ts          # Tipos compartilhados
-  │   └── utils.ts          # Funções auxiliares
-  ├── .env.example          # Modelo de configuração
-  ├── tsconfig.json         # Configuração do TypeScript
-  └── package.json          # Dependências e scripts
+  │   ├── cli.ts            # Main CLI
+  │   ├── presigned-url.ts  # Logic for Presigned URLs
+  │   ├── signed-cookies.ts # Logic for Presigned Cookies
+  │   ├── types.ts          # Shared Types
+  │   └── utils.ts          # Auxiliar functions
+  ├── .env.example          # Model for configuration of '.env' file
+  ├── tsconfig.json         # TypeScript configurations
+  └── package.json          # Dependence and scripts
 ```
 
-## ⚠️ Solução de Problemas
+## ⚠️ Problem solving
 
 ### Erro: Invalid private key
-Verifique se a chave privada no `.env` usa `\n` para quebras de linha.
+Make sure the private key in `.env` uses `\n` for line breaks.
 
 ### Erro: require is not defined
-Certifique-se de que:
+Make sure:
 
-- O `package.json` contém `"type": "module"`.
-- Os imports usam extensão `.js` (ex.: `./types.js`).
+- `package.json` contains `"type": "module"`.
 
-### Comando não encontrado (instalação global)
-Adicione o diretório global do npm ao `PATH`:
+### Command not found (global installation)
+Add the global npm directory to your `PATH`:
 
 ```bash
 npm config get prefix
 ```
 
-## 🤝 Contribuição
-
-Contribuições são bem-vindas! Siga os passos:
-
-1. Faça um fork do projeto.
-2. Crie uma branch (`git checkout -b feature/foo`).
-3. Commit suas alterações (`git commit -m 'Add foo'`).
-4. Push para a branch (`git push origin feature/foo`).
-5. Abra um Pull Request.
-
-## 📄 Licença
-
-MIT © [Seu Nome]
+## 📄 Feel free to fork this project
 
 Feito com ❤️ e TypeScript.
 
-## 🔗 Links Úteis
+## 🔗 Useful Links
 
 - [AWS CloudFront Signed URLs Docs](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-signed-urls.html)
 - [Commander.js Documentation](https://github.com/tj/commander.js)
