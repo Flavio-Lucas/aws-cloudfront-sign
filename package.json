@@ -1,6 +1,6 @@
 {
   "name": "aws-cloudfront-sign",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "type": "module",
   "bin": {
     "cloudfront-auth": "./src/cli.ts"
