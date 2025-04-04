@@ -9,14 +9,21 @@ export function generateSignedCookies(
   const relativePath = extractRelativePath(outputPath);
   if (!relativePath) return null;
 
-  const directoryPath = `${config.URL}/${relativePath}`;
+  // Correção 1: Usar a URL base do CloudFront diretamente
+  const baseUrl = config.URL;
+
+  // Correção 2: Construir o caminho relativo corretamente formatado
+  const resourcePath = `/${relativePath.replace(/^\/|\/$/g, '')}/*`;
+
+  console.log(baseUrl, resourcePath);
+
   const cookies = getSignedCookies({
-    url: `${directoryPath}/*`,
+    url: baseUrl,
     keyPairId: config.KEY_PAIR_ID,
     privateKey: config.PRIVATE_KEY,
     policy: JSON.stringify({
       Statement: [{
-        Resource: `${directoryPath}/*`,
+        Resource: resourcePath,
         Condition: {
           DateLessThan: {
             "AWS:EpochTime": Math.floor(Date.now() / 1000) + config.EXPIRATION_SECONDS

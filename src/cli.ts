@@ -3,6 +3,7 @@ import { Command } from 'commander';
 import { CloudFrontConfig } from './types';
 import { generatePresignedUrl } from './presigned-url';
 import { generateSignedCookies } from './signed-cookies';
+import { extractRelativePath } from './utils';
 
 const program = new Command();
 
@@ -73,6 +74,28 @@ Output:
       console.log('Error while generating cookies.');
     }
   });
+
+program
+  .command('test-cookies <outputPath>')
+  .description('Generate cookies and test with curl automatically')
+  .action((outputPath) => {
+    const cookies = generateSignedCookies(outputPath, CLOUDFRONT_CONFIG);
+    if (!cookies) {
+      console.error('Failed to generate cookies');
+      process.exit(1);
+    }
+
+    // Extrair valores dos cookies
+    const cookieValues = cookies.map(cookie => cookie.split(';')[0]);
+
+    // Construir URL de teste (exemplo: primeiro arquivo no "diretório")
+    const testUrl = `${CLOUDFRONT_CONFIG.URL}/${extractRelativePath(outputPath)}/stream-h264.m3u8`;
+
+    // Montar comando curl
+    console.log('\nExecute este comando para testar:');
+    console.log(`curl -v "${testUrl}" \\\n  -b "${cookieValues.join('; ')}"`);
+  });
+
 
 // Command to show help
 program
