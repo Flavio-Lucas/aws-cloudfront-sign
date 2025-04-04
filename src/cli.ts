@@ -85,10 +85,11 @@ program
       process.exit(1);
     }
 
-    // Extrair valores dos cookies
     const cookieValues = cookies.map(cookie => cookie.split(';')[0]);
 
-    // Construir URL de teste (exemplo: primeiro arquivo no "diretório")
+    console.log('Cookies for aws auth 🍪 🍪 🍪 :');
+    cookies.forEach(cookie => console.log("🍪 " + cookie + '\n'));
+
     const testUrl = `${CLOUDFRONT_CONFIG.URL}/${extractRelativePath(outputPath)}/stream-h264.m3u8`;
 
     // Montar comando curl

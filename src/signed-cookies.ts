@@ -4,26 +4,24 @@ import { extractRelativePath } from './utils';
 
 export function generateSignedCookies(
   outputPath: string,
-  config: CloudFrontConfig
+  config: CloudFrontConfig,
+  streamFilename: string = "stream-h264.m3u8"
 ): string[] | null {
   const relativePath = extractRelativePath(outputPath);
   if (!relativePath) return null;
 
-  // Correção 1: Usar a URL base do CloudFront diretamente
-  const baseUrl = config.URL;
-
-  // Correção 2: Construir o caminho relativo corretamente formatado
-  const resourcePath = `/${relativePath.replace(/^\/|\/$/g, '')}/*`;
-
-  console.log(baseUrl, resourcePath);
+  const directoryPath = `${config.URL}/${relativePath}`;
+  // const streamUrl = `${directoryPath}/${streamFilename}`;
 
   const cookies = getSignedCookies({
-    url: baseUrl,
+    // url: streamUrl,
+    url: directoryPath,
     keyPairId: config.KEY_PAIR_ID,
     privateKey: config.PRIVATE_KEY,
+    // dateLessThan: Math.floor(Date.now() / 1000) + config.EXPIRATION_SECONDS,
     policy: JSON.stringify({
       Statement: [{
-        Resource: resourcePath,
+        Resource: directoryPath,
         Condition: {
           DateLessThan: {
             "AWS:EpochTime": Math.floor(Date.now() / 1000) + config.EXPIRATION_SECONDS
