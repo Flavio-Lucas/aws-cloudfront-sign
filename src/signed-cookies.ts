@@ -26,7 +26,6 @@ export function generateSignedCookies(
     })
   });
 
-  console.log('Cookies gerados:', cookies);
   return [
     `CloudFront-Policy=${cookies['CloudFront-Policy']}; Path=/; Secure; HttpOnly`,
     `CloudFront-Signature=${cookies['CloudFront-Signature']}; Path=/; Secure; HttpOnly`,
