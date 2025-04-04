@@ -6,7 +6,7 @@
     "cloudfront-auth": "./src/cli.ts"
   },
   "scripts": {
-    "start": "tsx src/cli.ts --help"
+    "start": "tsx src/cli.ts"
   },
   "dependencies": {
     "@aws-sdk/cloudfront-signer": "^3.0.0",

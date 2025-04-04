@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { getSignedUrl } from '@aws-sdk/cloudfront-signer';
 import { CloudFrontConfig } from './types';
 import { extractRelativePath } from './utils';

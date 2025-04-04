@@ -14,9 +14,19 @@ export function generateSignedCookies(
     url: `${directoryPath}/*`,
     keyPairId: config.KEY_PAIR_ID,
     privateKey: config.PRIVATE_KEY,
-    dateLessThan: new Date(Date.now() + config.EXPIRATION_SECONDS * 1000).getDate(),
+    policy: JSON.stringify({
+      Statement: [{
+        Resource: `${directoryPath}/*`,
+        Condition: {
+          DateLessThan: {
+            "AWS:EpochTime": Math.floor(Date.now() / 1000) + config.EXPIRATION_SECONDS
+          }
+        }
+      }]
+    })
   });
 
+  console.log('Cookies gerados:', cookies);
   return [
     `CloudFront-Policy=${cookies['CloudFront-Policy']}; Path=/; Secure; HttpOnly`,
     `CloudFront-Signature=${cookies['CloudFront-Signature']}; Path=/; Secure; HttpOnly`,

@@ -13,7 +13,7 @@ const CLOUDFRONT_CONFIG: CloudFrontConfig = {
   EXPIRATION_SECONDS: 60 * 60 * 4, // 4 horas
 };
 
-// Configuração principal do CLI
+// Main CLI configuration
 program
   .name('aws-cloudfront-sign')
   .alias('cfs')
@@ -32,31 +32,44 @@ Configuração necessária:
   CLOUDFRONT_URL=https://d123.cloudfront.net
   `);
 
-// Comando para presigned URL
+// Prsigned URL command
 program
   .command('presigned-url <outputPath>')
   .description('Gera uma URL temporária para um arquivo específico')
   .addHelpText('after', `
 Exemplo:
-  $ cfs presigned-url "s3://meu-bucket/output/video-id/"
-  
-Saída:
-  https://d123.cloudfront.net/output/video-id/stream.m3u8?Policy=...`);
+  $ cfs presigned-url "s3://<BucketName>/<ObjectKeyPrefix>/<ObjectKey>"
 
-// Comando para signed cookies
+Saída:
+  https://d123.cloudfront.net/output/video-id/stream.m3u8?Policy=...`)
+  .action((outputPath) => {
+    const url = generatePresignedUrl(outputPath, CLOUDFRONT_CONFIG);
+    console.log(url);
+  });
+
+// Signed cookies command
 program
   .command('signed-cookies <outputPath>')
   .description('Gera cookies para acesso a múltiplos arquivos (ideal para HLS)')
   .addHelpText('after', `
 Exemplo:
-  $ cfs signed-cookies "s3://meu-bucket/output/video-id/"
-  
+  $ cfs signed-cookies "s3://<BucketName>/<ObjectKeyPrefix>/<ObjectKey>"
+
 Saída:
   CloudFront-Policy=...; Path=/; Secure; HttpOnly
   CloudFront-Signature=...; Path=/; Secure; HttpOnly
-  CloudFront-Key-Pair-Id=...; Path=/; Secure; HttpOnly`);
+  CloudFront-Key-Pair-Id=...; Path=/; Secure; HttpOnly`)
+  .action((outputPath) => {
+    const cookies = generateSignedCookies(outputPath, CLOUDFRONT_CONFIG);
+    if (cookies) {
+      console.log('Cookies for aws auth:');
+      cookies.forEach(cookie => console.log(cookie));
+    } else {
+      console.log('Error while generating cookies.');
+    }
+  });
 
-// Comando help adicional
+// Command to show help
 program
   .command('help')
   .description('Exibe ajuda detalhada')
@@ -64,7 +77,7 @@ program
 
 program.parse(process.argv);
 
-// Mostra ajuda se nenhum comando for fornecido
+// Shows help if no command is provided
 if (!process.argv.slice(2).length) {
   program.help();
 }
